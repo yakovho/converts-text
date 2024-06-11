@@ -20,7 +20,7 @@ function App() {
       formData.append("file.txt", file);
       axios({
         method: "post",
-        url: "http://localhost:5000/upload_file",
+        url: "/upload_file",
         data: formData,
         responseType: "blob",
       }).then((response) => {
