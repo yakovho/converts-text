@@ -34,24 +34,41 @@ app.post('/upload_file', upload.single('file.txt'), function (req, res) {
     if (type_system == "webenefit") {
       for (let i = 0; i < data_extracted.length; i++) {
         if (data_extracted[i].slice(0, 4) == 'B100') {
-          //  console.log(data_extracted[i].slice(202, 203))
-          if (data_extracted[i].slice(36, 37) == '1') {
-            if (data_extracted[i].slice(202, 203) == '1' && data_extracted[i + 1].slice(202, 203) == '2') {
 
-              if (data_extracted[i + 2].slice(36, 37) == '3') {
-                let temp = data_extracted[i];
-                data_extracted[i] = data_extracted[i + 1];
-                data_extracted[i + 1] = data_extracted[i + 2];
-                data_extracted[i + 2] = temp;
+          //מחיקת טקסט משדה אסמכתא
+          const check_char = (data) => {
+            for (let j = 60; j < 81; j++) {
+              if (/^[a-zA-Zא-ת]$/.test(data[j])) {
+                return true;
               }
-
-              else if (data_extracted[i + 2].slice(36, 37) == '1' || data_extracted[i + 2].slice(36, 37) == '2') {
-                let temp = data_extracted[i];
-                data_extracted[i] = data_extracted[i + 1];
-                data_extracted[i + 1] = temp;
-              }
-
             }
+          }
+
+          if (check_char(data_extracted[i])) {
+            data_extracted[i] = data_extracted[i].slice(0, 60) + "                    " + data_extracted[i].slice(80, 318)
+            console.log(data_extracted[i]);
+          };
+
+
+
+
+          //שינוי סדר השדות בפקודות הכנסה
+          if (data_extracted[i].slice(36, 37) == '1'
+            && data_extracted[i].slice(202, 203) == '1' && data_extracted[i + 1].slice(202, 203) == '2') {
+
+            if (data_extracted[i + 2].slice(36, 37) == '3') {
+              let temp = data_extracted[i];
+              data_extracted[i] = data_extracted[i + 1];
+              data_extracted[i + 1] = data_extracted[i + 2];
+              data_extracted[i + 2] = temp;
+            }
+
+            else if (data_extracted[i + 2].slice(36, 37) == '1' || data_extracted[i + 2].slice(36, 37) == '2') {
+              let temp = data_extracted[i];
+              data_extracted[i] = data_extracted[i + 1];
+              data_extracted[i + 1] = temp;
+            }
+
           }
         }
       }
