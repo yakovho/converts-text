@@ -68,8 +68,9 @@ function App() {
             <div className='border_form'>
               <img src='logo.png' width={140}></img>
               <div className="text_label">בחרו את התוכנה ממנה תרצו לייבא</div>
-              <Form.Select aria-label="Default select example">
-                <option>וובנפיט - webenefit</option>
+              <Form.Select aria-label="Default select example" onChange={(e) => {setType_system(e.target.value)}} >
+                <option value={"webenefit"}>וובנפיט - webenefit</option>
+                <option value={"hashavshevet"}>חשבשבת - משרד שם טוב</option>
               </Form.Select>
               <div className="text_label">בחרו את הקובץ אחיד בשם BKMVDATA</div>
               <Form.Control type="file" onChange={handleInputChange} name='webenefit' />

@@ -49,9 +49,6 @@ app.post('/upload_file', upload.single('file.txt'), function (req, res) {
             console.log(data_extracted[i]);
           };
 
-
-
-
           //שינוי סדר השדות בפקודות הכנסה
           if (data_extracted[i].slice(36, 37) == '1'
             && data_extracted[i].slice(202, 203) == '1' && data_extracted[i + 1].slice(202, 203) == '2') {
@@ -70,6 +67,54 @@ app.post('/upload_file', upload.single('file.txt'), function (req, res) {
             }
 
           }
+        }
+      }
+    }
+
+    if (type_system == "hashavshevet") {
+
+      for (let i = 0; i < data_extracted.length; i++) {
+        if (data_extracted[i].slice(0, 4) == 'B100') {
+
+          //שינוי סדר השדות בפקודות הכנסה (2-1-2)
+          if (data_extracted[i].slice(202, 203) == '2' &&
+            data_extracted[i + 1].slice(202, 203) == '1' &&
+            data_extracted[i + 2].slice(202, 203) == '2'
+
+            && data_extracted[i].slice(22, 32) == data_extracted[i + 1].slice(22, 32) &&
+            data_extracted[i + 1].slice(22, 32) == data_extracted[i + 2].slice(22, 32)
+          ) {
+            let temp = data_extracted[i + 1];
+            data_extracted[i + 1] = data_extracted[i + 2];
+            data_extracted[i + 2] = temp;
+          }
+
+          //שינוי סדר השדות בפקודות הכנסה (1 - 2 - 2)
+          if (data_extracted[i].slice(202, 203) == '1' &&
+            data_extracted[i + 1].slice(202, 203) == '2' &&
+            data_extracted[i + 2].slice(202, 203) == '2' 
+
+            && data_extracted[i].slice(22, 32) == data_extracted[i + 1].slice(22, 32) &&
+            data_extracted[i + 1].slice(22, 32) == data_extracted[i + 2].slice(22, 32)
+          ) {
+            let temp = data_extracted[i];
+            data_extracted[i] = data_extracted[i + 1];
+            data_extracted[i + 1] = data_extracted[i + 2];
+            data_extracted[i + 2] = temp;
+          }
+
+          //שמירה במערך את השורה השניה של הוצאות פטורות לצורך מחיקה
+          if (data_extracted[i].slice(202, 203) == '1' &&
+            data_extracted[i + 1].slice(202, 203) == '2'
+
+            && data_extracted[i].slice(22, 32) == data_extracted[i + 1].slice(22, 32) &&
+            data_extracted[i].slice(22, 32) !== data_extracted[i + 2].slice(22, 32) && 
+            data_extracted[i].slice(22, 32) !== data_extracted[i - 1].slice(22, 32)
+          ) {
+            data_extracted[i + 1] = data_extracted[i + 1].slice(0, 203) + "1" + data_extracted[i + 1].slice(203, 206) 
+            + "00000000000000" + data_extracted[i + 1].slice(222, 318)
+          }
+
         }
       }
     }
