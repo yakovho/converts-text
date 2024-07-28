@@ -111,7 +111,7 @@ app.post('/upload_file', upload.single('file.txt'), function (req, res) {
             data_extracted[i].slice(22, 32) !== data_extracted[i + 2].slice(22, 32) && 
             data_extracted[i].slice(22, 32) !== data_extracted[i - 1].slice(22, 32)
           ) {
-            data_extracted[i + 1] = data_extracted[i + 1].slice(0, 203) + "1" + data_extracted[i + 1].slice(203, 206) 
+            data_extracted[i + 1] = data_extracted[i + 1].slice(0, 202) + "1" + data_extracted[i + 1].slice(203, 206) 
             + "00000000000000" + data_extracted[i + 1].slice(222, 318)
           }
 
