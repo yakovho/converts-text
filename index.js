@@ -92,7 +92,7 @@ app.post('/upload_file', upload.single('file.txt'), function (req, res) {
           //שינוי סדר השדות בפקודות הכנסה (1 - 2 - 2)
           if (data_extracted[i].slice(202, 203) == '1' &&
             data_extracted[i + 1].slice(202, 203) == '2' &&
-            data_extracted[i + 2].slice(202, 203) == '2' 
+            data_extracted[i + 2].slice(202, 203) == '2'
 
             && data_extracted[i].slice(22, 32) == data_extracted[i + 1].slice(22, 32) &&
             data_extracted[i + 1].slice(22, 32) == data_extracted[i + 2].slice(22, 32)
@@ -108,14 +108,82 @@ app.post('/upload_file', upload.single('file.txt'), function (req, res) {
             data_extracted[i + 1].slice(202, 203) == '2'
 
             && data_extracted[i].slice(22, 32) == data_extracted[i + 1].slice(22, 32) &&
-            data_extracted[i].slice(22, 32) !== data_extracted[i + 2].slice(22, 32) && 
+            data_extracted[i].slice(22, 32) !== data_extracted[i + 2].slice(22, 32) &&
             data_extracted[i].slice(22, 32) !== data_extracted[i - 1].slice(22, 32)
           ) {
-            data_extracted[i + 1] = data_extracted[i + 1].slice(0, 202) + "1" + data_extracted[i + 1].slice(203, 206) 
-            + "00000000000000" + data_extracted[i + 1].slice(222, 318)
+            data_extracted[i + 1] = data_extracted[i + 1].slice(0, 202) + "1" + data_extracted[i + 1].slice(203, 206)
+              + "00000000000000" + data_extracted[i + 1].slice(222, 318)
           }
 
         }
+      }
+    }
+
+    if (type_system == "ramplus") {
+
+      data_extracted.sort((a, b) => {
+        if (a.slice(0, 4) == 'B100' && b.slice(0, 4) == 'B100') {
+          return a.slice(23, 32) - b.slice(23, 32);
+        }
+      });
+
+      for (let i = 0; i < data_extracted.length; i++) {
+        if (data_extracted[i].slice(0, 4) == 'B100') {
+
+          //שינוי סדר פקודות של 2 שורות
+          if (data_extracted[i].slice(23, 32) == data_extracted[i + 1].slice(23, 32)
+            && data_extracted[i].slice(23, 32) !== data_extracted[i + 2].slice(23, 32)
+            && data_extracted[i].slice(23, 32) !== data_extracted[i - 1].slice(23, 32)
+            && data_extracted[i].slice(208, 221) < data_extracted[i + 1].slice(208, 221)
+          ) {
+            let temp = data_extracted[i];
+            data_extracted[i] = data_extracted[i + 1];
+            data_extracted[i + 1] = temp;
+          }
+
+          //שינוי סדר פקודות של 3 שורות
+          if (data_extracted[i].slice(23, 32) == data_extracted[i + 1].slice(23, 32)
+            && data_extracted[i].slice(23, 32) == data_extracted[i + 2].slice(23, 32)
+            && data_extracted[i].slice(23, 32) !== data_extracted[i + 3].slice(23, 32)
+            && data_extracted[i].slice(23, 32) !== data_extracted[i - 1].slice(23, 32)
+          ) {
+            if (data_extracted[i].slice(208, 221) < data_extracted[i].slice(208, 221)) {
+              let temp = data_extracted[i];
+              data_extracted[i] = data_extracted[i + 1];
+              data_extracted[i + 1] = temp;
+            }
+
+            if (data_extracted[i + 1].slice(208, 221) > data_extracted[i + 2].slice(208, 221)) {
+              let temp = data_extracted[i + 1];
+              data_extracted[i + 1] = data_extracted[i + 2];
+              data_extracted[i + 2] = temp;
+            }
+
+            if (data_extracted[i].slice(208, 221) > data_extracted[i + 2].slice(208, 221)) {
+              let temp = data_extracted[i];
+              data_extracted[i] = data_extracted[i + 2];
+              data_extracted[i + 2] = temp;
+            }
+
+            if (data_extracted[i].slice(208, 221) < data_extracted[i].slice(208, 221)) {
+              let temp = data_extracted[i];
+              data_extracted[i] = data_extracted[i + 1];
+              data_extracted[i + 1] = temp;
+            }
+          }
+
+            //שינוי סדר פקודות של 4 שורות
+            if (data_extracted[i].slice(23, 32) == data_extracted[i + 1].slice(23, 32)
+              && data_extracted[i].slice(23, 32) == data_extracted[i + 2].slice(23, 32)
+              && data_extracted[i].slice(23, 32) == data_extracted[i + 3].slice(23, 32)
+            ) {
+                let temp = data_extracted[i];
+                data_extracted[i] = data_extracted[i + 3];
+                data_extracted[i + 3] = data_extracted[i + 1];
+                data_extracted[i + 1] = temp;
+              }
+        }
+
       }
     }
 
