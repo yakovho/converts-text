@@ -147,7 +147,7 @@ app.post('/upload_file', upload.single('file.txt'), function (req, res) {
             && data_extracted[i].slice(23, 32) !== data_extracted[i + 3].slice(23, 32)
             && data_extracted[i].slice(23, 32) !== data_extracted[i - 1].slice(23, 32)
           ) {
-            if (data_extracted[i].slice(208, 221) < data_extracted[i].slice(208, 221)) {
+            if (data_extracted[i].slice(208, 221) < data_extracted[i + 1].slice(208, 221)) {
               let temp = data_extracted[i];
               data_extracted[i] = data_extracted[i + 1];
               data_extracted[i + 1] = temp;
