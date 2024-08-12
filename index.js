@@ -187,6 +187,109 @@ app.post('/upload_file', upload.single('file.txt'), function (req, res) {
       }
     }
 
+    if (type_system == "summit") {
+
+      for (let i = 0; i < data_extracted.length; i++) {
+        if (data_extracted[i].slice(0, 4) == 'B100') {
+
+          //שינוי סדר השדות בפקודות הכנסה (2-2-1)
+          if (data_extracted[i].slice(202, 203) == '2' &&
+            data_extracted[i + 1].slice(202, 203) == '2' &&
+            data_extracted[i + 2].slice(202, 203) == '1'
+
+            && data_extracted[i].slice(22, 32) == data_extracted[i + 1].slice(22, 32) &&
+            data_extracted[i + 1].slice(22, 32) == data_extracted[i + 2].slice(22, 32)
+          ) {
+            let temp = data_extracted[i];
+            data_extracted[i] = data_extracted[i + 1];
+            data_extracted[i + 1] = temp;
+          }
+
+             //שינוי סדר השדות בפקודות הוצאה
+             if (data_extracted[i].slice(202, 203) == '2' &&
+             data_extracted[i + 1].slice(202, 203) == '1' &&
+             data_extracted[i + 2].slice(202, 203) == '1'
+ 
+             && data_extracted[i].slice(22, 32) == data_extracted[i + 1].slice(22, 32) &&
+             data_extracted[i + 1].slice(22, 32) == data_extracted[i + 2].slice(22, 32)
+           ) {
+             let temp = data_extracted[i];
+             data_extracted[i] = data_extracted[i + 2];
+             data_extracted[i] = data_extracted[i + 2];
+             data_extracted[i + 2] = temp;
+           }
+
+               //שינוי סדר השדות בפקודות הוצאה ללא מע"מ
+               if (data_extracted[i].slice(202, 203) == '2' &&
+               data_extracted[i + 1].slice(202, 203) == '1'
+                  
+               && data_extracted[i].slice(22, 32) == data_extracted[i + 1].slice(22, 32) &&
+               data_extracted[i].slice(22, 32) !== data_extracted[i + 2].slice(22, 32) && 
+               data_extracted[i].slice(22, 32) !== data_extracted[i - 1].slice(22, 32)
+             ) {
+               let temp = data_extracted[i];
+               data_extracted[i] = data_extracted[i + 1];
+               data_extracted[i + 1] = temp;
+
+               data_extracted[i + 1] = data_extracted[i + 1].slice(0, 202) + "1" + data_extracted[i + 1].slice(203, 206)
+              + "00000000000000" + data_extracted[i + 1].slice(222, 318)
+             }
+        }
+      }
+    }
+
+    if (type_system == "rivhit") {
+
+      for (let i = 0; i < data_extracted.length; i++) {
+        if (data_extracted[i].slice(0, 4) == 'B100') {
+
+          //שינוי סדר השדות בפקודות הכנסה (2-2-1)
+          if (data_extracted[i].slice(202, 203) == '1' &&
+            data_extracted[i + 1].slice(202, 203) == '2' &&
+            data_extracted[i + 2].slice(202, 203) == '2'
+
+            && data_extracted[i].slice(22, 32) == data_extracted[i + 1].slice(22, 32) &&
+            data_extracted[i + 1].slice(22, 32) == data_extracted[i + 2].slice(22, 32)
+          ) {
+            let temp = data_extracted[i];
+            data_extracted[i] = data_extracted[i + 1];
+            data_extracted[i + 1] = data_extracted[i + 2];
+            data_extracted[i + 2] = temp;
+          }
+
+             //שינוי סדר השדות בפקודות הוצאה
+             if (data_extracted[i].slice(202, 203) == '2' &&
+             data_extracted[i + 1].slice(202, 203) == '1' &&
+             data_extracted[i + 2].slice(202, 203) == '1'
+ 
+             && data_extracted[i].slice(22, 32) == data_extracted[i + 1].slice(22, 32) &&
+             data_extracted[i + 1].slice(22, 32) == data_extracted[i + 2].slice(22, 32)
+           ) {
+            let temp = data_extracted[i];
+            data_extracted[i] = data_extracted[i + 1];
+            data_extracted[i + 1] = data_extracted[i + 2];
+            data_extracted[i + 2] = temp;
+           }
+
+               //שינוי סדר השדות בפקודות הוצאה ללא מע"מ
+               if (data_extracted[i].slice(202, 203) == '2' &&
+               data_extracted[i + 1].slice(202, 203) == '1'
+                  
+               && data_extracted[i].slice(22, 32) == data_extracted[i + 1].slice(22, 32) &&
+               data_extracted[i].slice(22, 32) !== data_extracted[i + 2].slice(22, 32) && 
+               data_extracted[i].slice(22, 32) !== data_extracted[i - 1].slice(22, 32)
+             ) {
+               let temp = data_extracted[i];
+               data_extracted[i] = data_extracted[i + 1];
+               data_extracted[i + 1] = temp;
+
+               data_extracted[i + 1] = data_extracted[i + 1].slice(0, 202) + "1" + data_extracted[i + 1].slice(203, 206)
+               + "00000000000000" + data_extracted[i + 1].slice(222, 318)
+             }
+        }
+      }
+    }
+
     let invoice;
 
     for (let i = 0; i < data_extracted.length; i++) {
