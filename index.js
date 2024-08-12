@@ -115,6 +115,13 @@ app.post('/upload_file', upload.single('file.txt'), function (req, res) {
               + "00000000000000" + data_extracted[i + 1].slice(222, 318)
           }
 
+          //החלפת אסמכתא 1 ו 2 בהוצאות בגלל שהאסמכתא מופיעה ב 2
+          if (data_extracted[i].slice(60, 80) == '00000000000000000000') {
+            console.log("gyfguwfgyu");
+            
+          data_extracted[i] = data_extracted[i].slice(0, 60) + data_extracted[i].slice(83, 103) + data_extracted[i].slice(80, 318)
+        }
+
         }
       }
     }
