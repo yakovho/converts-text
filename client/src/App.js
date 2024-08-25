@@ -74,6 +74,7 @@ function App() {
                 <option value={"ramplus"}>רם פלוס</option>
                 <option value={"summit"}>סאמיט</option>
                 <option value={"rivhit"}>ריוחית</option>
+                <option value={"finbot"}>פינבוט</option>
               </Form.Select>
               <div className="text_label">בחרו את הקובץ אחיד בשם BKMVDATA</div>
               <Form.Control type="file" onChange={handleInputChange} name='webenefit' />
