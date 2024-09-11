@@ -289,7 +289,19 @@ app.post('/upload_file', upload.single('file.txt'), function (req, res) {
 
     if (type_system == "rivhit") {
 
+      let count = 9000;
+
+      ////שינוי המספר פקודות
       for (let i = 0; i < data_extracted.length; i++) {
+        if (data_extracted[i].slice(0, 4) == 'B100') {
+          data_extracted[i] = data_extracted[i].slice(0, 28) + count + data_extracted[i].slice(32, 318);
+          if (data_extracted[i + 1].slice(36, 37) == "1") {
+            count ++;
+          }
+        }
+      }
+
+     for (let i = 0; i < data_extracted.length; i++) {
         if (data_extracted[i].slice(0, 4) == 'B100') {
 
           //שינוי סדר השדות בפקודות הכנסה (2-2-1)
